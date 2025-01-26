@@ -35,7 +35,7 @@ drawBoard();
 
 boxes.forEach((element, index) => {
     element.addEventListener("click", (e) => {
-            generateMoves(e, index);
+            generateMoves(element, index);
     })
 })
 
@@ -50,11 +50,41 @@ restartBtn.addEventListener("click", () => {
     resetBoard();
 })
 
+function bestMoveFinder () {
+    for(let i = 0; i < 9; i++) {
+        if(winArr[i] === "") {
+            winArr[i] = 'X';
+            //checking if computer is winning
+            if(checkForWin()) {
+                winArr[i] = "";
+                return i;   //returning the winning index;
+            }
+            winArr[i] = "";
+        }
+    }
 
+    for(let i = 0; i < 9; i++) {
+        if(winArr[i] === ""){
+            winArr[i] = '0';
+            //checking if user is winning.
+            if(checkForWin()) {
+                winArr[i] = "";
+                return i;   // preventing user from winning.
+            }
+            winArr[i] = "";
+        }
+    }
+
+    //Prioritize center then corners and then edges
+    let squaresPriority = [4, 0 , 2 , 6 , 8 , 1 , 3 , 5 , 7].find(square => winArr[square] === "");
+
+    return squaresPriority;
+}
 
 function generateComputerMove () {
     if(!gameActive) return;
-    
+
+
     if(checkForWin()){
         displayWinner('0');
         return;
@@ -63,14 +93,12 @@ function generateComputerMove () {
         alert("It's a Draw!");
         return;
     }
+    let bestMove = bestMoveFinder();
+
     mark = 'X';
-    let number = 1;
-    do {
-        number = Math.floor(Math.random() * 9);
-    }while(boxes[number].textContent != "")
     
-    winArr[number] = mark;
-    boxes[number].innerText = winArr[number];
+    winArr[bestMove] = mark;
+    boxes[bestMove].innerText = winArr[bestMove];
     
     if(checkForWin()){
         displayWinner('X');
@@ -83,7 +111,7 @@ function generateMoves(element, index) {
     
     mark = '0';
     winArr[index] = mark;
-    element.target.innerText = winArr[index];
+    element.innerText = winArr[index];
     
     if(checkForWin()){
         displayWinner('0');
