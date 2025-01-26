@@ -1,6 +1,7 @@
 
 const boxes = document.querySelectorAll(".box");
 const resetBtn = document.getElementById("resetBtn");
+const restartBtn = document.getElementById("restart");
 const computerScore = document.getElementById("compScore");
 const userScore = document.getElementById("userScore");
 
@@ -15,10 +16,10 @@ function displayWinner(winner) {
     let message;
     if(winner === 'X'){
          message = 'Computer Wins!';
-        ++computerScore.textContent;
+        computerScore.textContent = ++computerScoreCount ;
     }else{
          message = 'You Win!';
-        ++userScore.textContent;
+        userScore.textContent = ++userScoreCount;
     }
     setTimeout(() => {
         alert(message);
@@ -42,6 +43,14 @@ resetBtn.addEventListener("click", (e) => {
     resetBoard();
     drawBoard();
 })
+
+restartBtn.addEventListener("click", () => {
+    computerScoreCount = userScoreCount = 0;
+    computerScore.innerText = userScore.innerText = 0; 
+    resetBoard();
+})
+
+
 
 function generateComputerMove () {
     if(!gameActive) return;
@@ -102,13 +111,10 @@ function checkForWin () {
     ];
 
     // It will return true if comes true even one time.
-    return winPatterns.some(pattern => {    
-           if(
+    return winPatterns.some(pattern =>     
         winArr[pattern[0]] !== '' &&    // checking if it is empty
            winArr[pattern[0]] === winArr[pattern[1]] &&
-            winArr[pattern[1]] == winArr[pattern[2]])
-                return 1;
-        }
+            winArr[pattern[1]] == winArr[pattern[2]]
 )
 
 
