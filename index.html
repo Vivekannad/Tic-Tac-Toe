@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: cursive;
+            background-color: black;
+        }
+        .game {
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            height: 500px;
+        }
+        .game .gameBoard {
+            display: flex;
+            justify-content: space-between;
+        }
+        .game .gameBoard .boxes {
+            width: 300px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .boxes .box {
+            border: 2px solid black;
+            width: 30%;
+            height: 100px;
+            font-size: 4rem;
+            text-align: center;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+
+        }
+        .buttons button{
+            /* display: block; */
+            width: 35%;
+            border: none;
+            padding: 10px;
+            font-family: cursive;
+            margin: 10px auto;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .buttons .reset {
+            background-color: green;
+        }
+        .buttons .restart {
+            background-color: red;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="game">
+      <h1>Tic Tac Toe</h1>
+      <div class="gameBoard">
+        <div class="boxes">
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="buttons">
+                <button class="reset" id="resetBtn">Reset</button>
+                <button class="restart" id="restart">Restart</button>
+            </div>
+        </div>
+        <div class="score">
+            <p >Computer Score:- <span id="compScore">0</span></p>
+            <p >Your Score:- <span id="userScore">0</span> </p>
+        </div>
+      </div>  
+    </div>
+
+    <script src="./game.js"></script>
+</body>
+</html>
