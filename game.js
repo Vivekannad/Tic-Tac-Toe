@@ -22,7 +22,6 @@ function displayWinner(winner) {
     }
     setTimeout(() => {
         alert(message);
-        resetBoard();
     }, 100);
 }
 
@@ -53,7 +52,6 @@ function generateComputerMove () {
     }
     if(!checkForDraw()){
         alert("It's a Draw!");
-        resetBoard();
         return;
     }
     mark = 'X';
@@ -85,7 +83,6 @@ function generateMoves(element, index) {
     
     if(!checkForDraw()){
         alert("It's a Draw!");
-        resetBoard();
         return;
     }
     
@@ -93,12 +90,8 @@ function generateMoves(element, index) {
 }
 
 function checkForDraw () {
-    let gameState = 0;
-    winArr.forEach(value => {
-        if(value == '') gameState++;
-    })
-
-    return gameState
+    //returns true if array contains empty string and false if it doesn't
+    return winArr.includes(""); 
 }
 
 function checkForWin () {
