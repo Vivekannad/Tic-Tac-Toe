@@ -1,4 +1,5 @@
 
+// All Dom elements
 const boxes = document.querySelectorAll(".box");
 const resetBtn = document.getElementById("resetBtn");
 const restartBtn = document.getElementById("restart");
@@ -6,11 +7,30 @@ const computerScore = document.getElementById("compScore");
 const userScore = document.getElementById("userScore");
 
 let winArr = Array(9).fill(""); // filled array with the given value till length is 9.
-
 let gameActive = true;
 let computerScoreCount = 0;
 let userScoreCount = 0;
-let mark;
+let currentPlayer;
+
+document.addEventListener ("DOMContentLoaded", () => {
+    drawBoard();
+})
+
+boxes.forEach((element, index) => {
+        // assigning event to every square.
+    element.addEventListener("click", () => {
+            generateMoves(element, index);
+    })
+})
+
+resetBtn.addEventListener("click",  resetBoard)
+
+restartBtn.addEventListener("click", () => {
+    computerScoreCount = userScoreCount = 0;
+    computerScore.innerText = userScore.innerText = 0; 
+    resetBoard();
+})
+
 
 function displayWinner(winner) {
     let message;
@@ -27,34 +47,14 @@ function displayWinner(winner) {
 }
 
 function drawBoard () {
-    boxes.forEach((box, index) => {
-        box.innerText = winArr[index];
-    });
+    boxes.forEach((box, index) => box.innerText = winArr[index]);
 }
-drawBoard();
-
-boxes.forEach((element, index) => {
-    element.addEventListener("click", (e) => {
-            generateMoves(element, index);
-    })
-})
-
-resetBtn.addEventListener("click", (e) => {
-    resetBoard();
-    drawBoard();
-})
-
-restartBtn.addEventListener("click", () => {
-    computerScoreCount = userScoreCount = 0;
-    computerScore.innerText = userScore.innerText = 0; 
-    resetBoard();
-})
 
 function bestMoveFinder () {
+    //checking if computer is winning
     for(let i = 0; i < 9; i++) {
         if(winArr[i] === "") {
             winArr[i] = 'X';
-            //checking if computer is winning
             if(checkForWin()) {
                 winArr[i] = "";
                 return i;   //returning the winning index;
@@ -63,10 +63,10 @@ function bestMoveFinder () {
         }
     }
 
+    //checking if user is winning.
     for(let i = 0; i < 9; i++) {
         if(winArr[i] === ""){
             winArr[i] = '0';
-            //checking if user is winning.
             if(checkForWin()) {
                 winArr[i] = "";
                 return i;   // preventing user from winning.
@@ -76,32 +76,28 @@ function bestMoveFinder () {
     }
 
     //Prioritize center then corners and then edges
-    let squaresPriority = [4, 0 , 2 , 6 , 8 , 1 , 3 , 5 , 7].find(square => winArr[square] === "");
 
-    return squaresPriority;
+    return [4, 0 , 2 , 6 , 8 , 1 , 3 , 5 , 7].find(square => winArr[square] === "") ?? -1;
 }
 
 function generateComputerMove () {
     if(!gameActive) return;
+    
+    currentPlayer = 'X';
 
+    const bestMove = bestMoveFinder();
+    if(bestMove === -1) return ;
 
-    if(checkForWin()){
-        displayWinner('0');
-        return;
-    }
-    if(!checkForDraw()){
+    
+    winArr[bestMove] = currentPlayer;
+    boxes[bestMove].innerText = winArr[bestMove];
+    
+    if(checkForDraw()){
         alert("It's a Draw!");
         return;
     }
-    let bestMove = bestMoveFinder();
-
-    mark = 'X';
-    
-    winArr[bestMove] = mark;
-    boxes[bestMove].innerText = winArr[bestMove];
-    
     if(checkForWin()){
-        displayWinner('X');
+        displayWinner(currentPlayer);
         return;
     }
 }
@@ -109,16 +105,16 @@ function generateComputerMove () {
 function generateMoves(element, index) {
     if(!gameActive || winArr[index] !== '') return;
     
-    mark = '0';
-    winArr[index] = mark;
+    currentPlayer = '0';
+    winArr[index] = currentPlayer;
     element.innerText = winArr[index];
     
     if(checkForWin()){
-        displayWinner('0');
+        displayWinner(currentPlayer);
         return;
     }
     
-    if(!checkForDraw()){
+    if(checkForDraw()){
         alert("It's a Draw!");
         return;
     }
@@ -128,7 +124,7 @@ function generateMoves(element, index) {
 
 function checkForDraw () {
     //returns true if array contains empty string and false if it doesn't
-    return winArr.includes(""); 
+    return !winArr.includes(""); 
 }
 
 function checkForWin () {
@@ -142,16 +138,13 @@ function checkForWin () {
     return winPatterns.some(pattern =>     
         winArr[pattern[0]] !== '' &&    // checking if it is empty
            winArr[pattern[0]] === winArr[pattern[1]] &&
-            winArr[pattern[1]] == winArr[pattern[2]]
+            winArr[pattern[1]] === winArr[pattern[2]]
 )
-
 
 }
 
 function resetBoard () {
     gameActive = true;
     winArr.fill("");    //fills the array with empty strings
-    boxes.forEach(box => {
-        box.innerText = "";
-    });
+    drawBoard();
 }
