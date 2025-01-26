@@ -4,7 +4,8 @@ const resetBtn = document.getElementById("resetBtn");
 const computerScore = document.getElementById("compScore");
 const userScore = document.getElementById("userScore");
 
-let winArr = ["","","","","","","","",""];
+let winArr = Array(9).fill(""); // filled array with the given value till length is 9.
+
 let gameActive = true;
 let computerScoreCount = 0;
 let userScoreCount = 0;
@@ -101,54 +102,29 @@ function checkForDraw () {
 }
 
 function checkForWin () {
+    let winPatterns = [
+        [0,1,2] , [3,4,5] , [6,7,8] , //horizontal 
+        [0,3,6] , [1,4,7] , [2,5,8] , // vertical 
+        [0,4,8] , [2,4,6]   //diagonal
+    ];
 
-
-    for(let i = 0; i < 3; i++) {
-        if(winArr[i] !== '' && winArr[i] === winArr[i+3] && winArr[i+3] === winArr[i+6]){  //vertical check
-            return 1;
-        } 
-    }
-    for(let i = 0 ; i < 9; i+=3) {
-        if(winArr[i] !== '' && winArr[i] === winArr[i+1] && winArr[i+1] === winArr[i+2]) {    //horizontal check
-            return 1;
+    // It will return true if comes true even one time.
+    return winPatterns.some(pattern => {    
+           if(
+        winArr[pattern[0]] !== '' &&    // checking if it is empty
+           winArr[pattern[0]] === winArr[pattern[1]] &&
+            winArr[pattern[1]] == winArr[pattern[2]])
+                return 1;
         }
-    }
-    if(winArr[0] !== '' && winArr[0] === winArr[4] && winArr[4] === winArr[8]){   //diagonal check
-        return 1;   
-    }
-    if(winArr[2] !== '' && winArr[2] === winArr[4] && winArr[4] === winArr[6]) {      //diagonal check
-        return 1;
-    }
-    return 0;
+)
+
+
 }
 
 function resetBoard () {
     gameActive = true;
-    for(let i = 0; i < 9; i++){
-        winArr[i] = "";
-    }
+    winArr.fill("");    //fills the array with empty strings
     boxes.forEach(box => {
         box.innerText = "";
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
